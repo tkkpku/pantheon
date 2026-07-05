@@ -1,0 +1,20 @@
+# 编译产物
+*.exe
+*.o
+*.obj
+*.out
+
+# MATLAB 临时文件
+*.asv
+*.m~
+*.mat
+
+# 图片（可选：如果你的 png 太大，可以忽略）
+# *.png
+
+# VS Code
+.vscode/
+
+# 系统文件
+Thumbs.db
+Desktop.ini
