@@ -3,145 +3,113 @@
 #include <iomanip>
 #include <vector>
 #include <cmath>
-#include <windows.h>
 
 int main() {
-    SetConsoleOutputCP(CP_UTF8);
     std::cout << "==============================================\n";
-    std::cout << "  万神殿穹顶藻井几何建模与减重计算\n";
-    std::cout << "  课题 2 — 基于 Aliberti & Alonso-Rodriguez (2017)\n";
-    std::cout << "  球面半径 R = 22.03 m（激光扫描实测）\n";
+    std::cout << "  万神殿穹顶藻井 — 拱券模型 & 两类裂缝分析\n";
+    std::cout << "  R = 22.03 m,  f_t = " << FT_DOME/1e3 << " kPa\n";
     std::cout << "==============================================\n\n";
 
-    // =====================================================
-    // 藻井数据 —— 全部来自论文实测值
-    // =====================================================
-    //
-    // 论文 Table 2：藻井尺寸（North-East quadrant, sectors 2-6 平均）
-    //   层   底宽(m)  顶宽(m)  高度/弧长(m)
-    //   A    3.88     3.77     4.08         ← 最下层，靠近鼓座
-    //   B    3.74     3.48     3.79
-    //   C    3.39     3.02     3.52
-    //   D    2.92     2.50     3.05
-    //   E    2.38     2.02     2.39         ← 最上层，靠近 Oculus
-    //
-    // 论文 Table 3：各级阶梯深度 → 总深度 (m)
-    //   A: 0.23+0.19+0.13+0.12 = 0.67
-    //   B: 0.22+0.18+0.13+0.12 = 0.65
-    //   C: 0.21+0.18+0.12+0.10 = 0.61
-    //   D: 0.20+0.16+0.11+0.07 = 0.54
-    //   E: 0.19+0.15+0.14      = 0.48
-    //
-    // 环向水平带（层间分隔）: 平均 0.84 m
-    // 经线肋宽: 底部 1.02 m → 顶部 0.67 m
-    //
-    // 藻井内表面是平的（论文原文："tend to be flat"）
-
-    // --- 计算各层藻井中心的纬度 phi ---
-    // 球心在檐口平面以下 0.37 m
-    // 檐口处 phi ≈ π/2
-    // 从檐口向上，依次排列：水平带 → 藻井A → 带 → 藻井B → ...
-    //
-    // 藻井 A 底部距檐口 ≈ 水平带宽度的一半（约 0.42 m 弧长）
-    // 简化：将各层藻井中线按弧长均匀分布
-
-    double phi_oculus = asin(R_OCULUS / R);  // ≈ 11.66°
-    double phi_cornice = PI / 2.0;            // 90° (檐口)
-
-    // 水平带 0.84 m，藻井高度依次为 4.08, 3.79, 3.52, 3.05, 2.39 m
-    double band = 0.84;  // m (弧长)
-    double h[5] = {4.08, 3.79, 3.52, 3.05, 2.39};  // A~E
-
-    // 从檐口向上的累积弧长（到每层藻井的中心）
-    double arc_from_cornice[5];
-    double cum = band / 2.0;  // 第一个半带
-    for (int i = 0; i < 5; i++) {
-        arc_from_cornice[i] = cum + h[i] / 2.0;
-        cum += h[i] + band;
-    }
-
-    // 从檐口(phi=90°)向上减去弧长/R 得到 phi
-    std::vector<CofferLayer> layers;
-    const char* names[5] = {"A(最下)", "B", "C", "D", "E(最上)"};
-    double w_bot[5] = {3.88, 3.74, 3.39, 2.92, 2.38};
-    double w_top[5] = {3.77, 3.48, 3.02, 2.50, 2.02};
+    double band = 0.84;
+    double h[5]      = {4.08, 3.79, 3.52, 3.05, 2.39};
+    double w_bot[5]  = {3.88, 3.74, 3.39, 2.92, 2.38};
+    double w_top[5]  = {3.77, 3.48, 3.02, 2.50, 2.02};
     double depths[5] = {0.67, 0.65, 0.61, 0.54, 0.48};
+    const char* names[5] = {"A(底)", "B", "C", "D", "E(顶)"};
 
+    double phi_oculus = asin(R_OCULUS / R);
+    double cum = band / 2.0;
+    double arc[5];
+    for (int i = 0; i < 5; i++) { arc[i] = cum + h[i]/2.0; cum += h[i] + band; }
+
+    std::vector<CofferLayer> layers;
     for (int i = 0; i < 5; i++) {
         CofferLayer L;
-        L.name       = names[i];
-        L.phi_center = PI / 2.0 - arc_from_cornice[i] / R;
-        L.arc_height = h[i];
-        L.w_bottom   = w_bot[i];
-        L.w_top      = w_top[i];
-        L.depth      = depths[i];
-        L.count      = 28;
+        L.name = names[i]; L.phi_center = PI/2.0 - arc[i]/R;
+        L.arc_height = h[i]; L.w_bottom = w_bot[i];
+        L.w_top = w_top[i]; L.depth = depths[i]; L.count = 28;
         layers.push_back(L);
     }
 
-    // =====================================================
-    // 计算
-    // =====================================================
     std::cout << "正在计算...\n\n";
     CofferResult res = compute_coffers(layers);
+    double B = res.mass_reduction_ratio;
 
-    // =====================================================
-    // 输出
-    // =====================================================
-    std::cout << std::fixed << std::setprecision(3);
-    std::cout << "========== 计算结果 ==========\n";
-    std::cout << "无藻井穹顶总质量:   "
+    // ---- 拱券分析 ----
+    double W0  = arch_self_weight(0.0);
+    double WB  = arch_self_weight(B);
+    double H0  = arch_horizontal_thrust(0.0);
+    double HB  = arch_horizontal_thrust(B);
+    double jcf0 = compute_jcf(0.0);
+    double jcfB = compute_jcf(B);
+    double jcir = compute_jcir(B);
+    double ps0  = peak_hoop_stress_base(0.0);
+    double psB  = peak_hoop_stress_base(B);
+    double mcfr = compute_mcfr(B);
+
+    std::cout << std::fixed;
+    std::cout << "========== 减重结果 ==========\n";
+    std::cout << "无藻井穹顶总质量:   " << std::setprecision(1)
               << res.mass_no_coffers / 1000.0 << " 吨\n";
     std::cout << "藻井挖去总质量:     "
               << res.total_coffer_mass / 1000.0 << " 吨\n";
-    std::cout << "减重比例:           "
-              << res.mass_reduction_ratio * 100.0 << " %\n\n";
+    std::cout << "减重比例 B:         " << std::setprecision(3)
+              << B * 100.0 << " %\n\n";
 
-    std::cout << "各层藻井详情:\n";
-    std::cout << "层     纬度°   弧高m   底宽m  顶宽m   深度m  ";
-    std::cout << "单个体积m³  层体积m³  层质量吨\n";
-    std::cout << "──────────────────────────────────────────────";
-    std::cout << "──────────────────\n";
+    std::cout << "========== 拱券模型 (开裂后状态) ==========\n";
+    std::cout << "楔形拱数量:          28 个\n";
+    std::cout << "单拱自重 (无藻井):   " << std::setprecision(1)
+              << W0 / 1e6 << " MN\n";
+    std::cout << "单拱自重 (有藻井):   " << WB / 1e6 << " MN\n";
+    std::cout << "自重降低:            " << std::setprecision(1)
+              << (W0 - WB) / W0 * 100.0 << " %\n\n";
+    std::cout << "拱脚推力 (无藻井):   " << H0 / 1e6 << " MN\n";
+    std::cout << "拱脚推力 (有藻井):   " << HB / 1e6 << " MN\n";
+    std::cout << "推力降低:            "
+              << (H0 - HB) / H0 * 100.0 << " %\n\n";
+
+    std::cout << "========== 交界处裂缝 (JCF) ==========\n";
+    std::cout << "JCF (无藻井):        " << std::setprecision(3)
+              << jcf0 << "\n";
+    std::cout << "JCF (有藻井):        " << jcfB << "\n";
+    std::cout << "交界处裂缝改善率 JCIR: "
+              << std::setprecision(1) << jcir * 100.0 << " %\n";
+    std::cout << "  (= 拱脚推力降低比例 = 减重比例 B)\n\n";
+
+    std::cout << "========== 子午向裂缝 ==========\n";
+    std::cout << "底部有效拉应力 (无藻井): " << std::setprecision(1)
+              << ps0 / 1e3 << " kPa\n";
+    std::cout << "底部有效拉应力 (有藻井): " << psB / 1e3 << " kPa\n";
+    std::cout << "底部驱动力降低率 MCFR:   "
+              << std::setprecision(1) << mcfr * 100.0 << " %\n";
+    std::cout << "  (收缩占主导 → 减重影响有限)\n\n";
+
+    std::cout << "========== 两类裂缝对比 ==========\n";
+    std::cout << "              驱动力降低   藻井影响\n";
+    std::cout << "交界处裂缝    " << std::setprecision(1)
+              << jcir * 100.0 << "%         强 (H ∝ 自重)\n";
+    std::cout << "子午向裂缝    "
+              << mcfr * 100.0 << "%          弱 (收缩主导)\n\n";
+
+    std::cout << "========== 各层藻井 ==========\n";
+    std::cout << "层     纬度°  单体积m³  层质量吨\n"
+              << "──────────────────────────────────\n";
     for (size_t i = 0; i < layers.size(); i++) {
-        const CofferLayer& L = layers[i];
         double V1 = single_coffer_volume_prism(
-            L.phi_center, L.arc_height, L.w_bottom, L.w_top, L.depth);
-
-        std::cout << std::setw(8)  << std::left  << L.name
-                  << std::setw(7)  << std::right << std::setprecision(1)
-                  << L.phi_center * 180.0 / PI
-                  << std::setw(8)  << std::setprecision(2) << L.arc_height
-                  << std::setw(7)  << L.w_bottom
-                  << std::setw(7)  << L.w_top
-                  << std::setw(7)  << L.depth
+            layers[i].phi_center, layers[i].arc_height,
+            layers[i].w_bottom, layers[i].w_top, layers[i].depth);
+        std::cout << std::setw(6) << std::left << layers[i].name
+                  << std::setw(7) << std::right << std::setprecision(1)
+                  << layers[i].phi_center * 180.0 / PI
                   << std::setw(10) << std::setprecision(2) << V1
-                  << std::setw(10) << res.layer_volumes[i]
-                  << std::setw(10) << res.layer_masses[i] / 1000.0
-                  << "\n";
+                  << std::setw(10) << res.layer_masses[i] / 1000.0 << "\n";
     }
-    std::cout << "──────────────────────────────────────────────";
-    std::cout << "──────────────────\n";
-    std::cout << std::setw(8)  << std::left  << "合计"
-              << std::setw(7)  << " "
-              << std::setw(8)  << " "
-              << std::setw(7)  << " "
-              << std::setw(7)  << " "
-              << std::setw(7)  << " "
-              << std::setw(10) << " "
-              << std::setw(10) << res.total_coffer_volume
-              << std::setw(10) << res.total_coffer_mass / 1000.0
-              << "\n\n";
+    std::cout << "──────────────────────────────────\n\n";
 
-    // =====================================================
-    // 导出 CSV
-    // =====================================================
     export_stress_profile("stress_profile.csv", 200);
     export_layer_details("coffer_details.csv", layers, res);
-
-    std::cout << "========== 导出文件 ==========\n";
-    std::cout << "stress_profile.csv  → MATLAB 画应力分布图\n";
-    std::cout << "coffer_details.csv  → MATLAB 画藻井对比图\n";
-    std::cout << "==============================\n";
+    std::cout << "[导出] stress_profile.csv\n";
+    std::cout << "[导出] coffer_details.csv\n";
 
     return 0;
 }

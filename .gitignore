@@ -9,8 +9,6 @@
 *.m~
 *.mat
 
-# 图片（可选：如果你的 png 太大，可以忽略）
-# *.png
 
 # VS Code
 .vscode/

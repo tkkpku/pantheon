@@ -2,37 +2,27 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <cstdio>
+#include <cmath>
 
-// ============================================================
-// 密度（四层梯度）
-// ============================================================
 double density(double phi) {
     double deg = phi * 180.0 / PI;
-    if (deg < 12.0)      return 1350.0;   // 纯浮石
-    else if (deg < 25.0) return 1600.0;   // 浮石+凝灰岩
-    else if (deg < 40.0) return 1800.0;   // 凝灰岩+碎砖
-    else                 return 2100.0;   // 石灰华
+    if (deg < 12.0)      return 1350.0;
+    else if (deg < 25.0) return 1600.0;
+    else if (deg < 40.0) return 1800.0;
+    else                 return 2100.0;
 }
 
-// ============================================================
-// 厚度（线性递减）
-// ============================================================
 double thickness(double phi) {
-    double phi_oc = asin(R_OCULUS / R);
-    double phi_max = PI / 2.0;
-    if (phi <= phi_oc) return T_OCULUS;
-    if (phi >= phi_max) return T_BASE;
-    double r = (phi - phi_oc) / (phi_max - phi_oc);
-    return T_OCULUS + (T_BASE - T_OCULUS) * r;
+    double oc = asin(R_OCULUS / R), mx = PI / 2.0;
+    if (phi <= oc) return T_OCULUS;
+    if (phi >= mx) return T_BASE;
+    return T_OCULUS + (T_BASE - T_OCULUS) * (phi - oc) / (mx - oc);
 }
 
-// ============================================================
-// Simpson
-// ============================================================
 double simpson(double (*f)(double), double a, double b, int n) {
     if (n % 2 != 0) n++;
-    double h = (b - a) / n;
-    double s = f(a) + f(b);
+    double h = (b - a) / n, s = f(a) + f(b);
     for (int i = 1; i < n; i++) {
         double x = a + i * h;
         s += (i % 2 == 0) ? 2.0 * f(x) : 4.0 * f(x);
@@ -40,66 +30,91 @@ double simpson(double (*f)(double), double a, double b, int n) {
     return s * h / 3.0;
 }
 
-// ============================================================
-// 无藻井穹顶总质量
-// ============================================================
+double N_phi_val(double phi) {
+    double g = density(phi) * thickness(phi) * G;
+    return -g * R / (1.0 + cos(phi));
+}
+
+double N_theta_val(double phi) {
+    double g = density(phi) * thickness(phi) * G;
+    return -g * R * (cos(phi) - 1.0 / (1.0 + cos(phi)));
+}
+
+double sigma_theta(double phi) {
+    return N_theta_val(phi) / thickness(phi);
+}
+
 static double dM_dphi(double phi) {
-    double t   = thickness(phi);
-    double rho = density(phi);
-    return rho * t * 2.0 * PI * R * R * sin(phi);
+    return density(phi) * thickness(phi) * 2.0 * PI * R * R * sin(phi);
 }
 
 double total_mass_no_coffers() {
-    double phi_oc = asin(R_OCULUS / R);
-    return simpson(dM_dphi, phi_oc, PI / 2.0, 200);
+    return simpson(dM_dphi, asin(R_OCULUS / R), PI / 2.0, 200);
 }
 
-// ============================================================
-// 单个藻井体积 —— 平底棱台公式
-// ============================================================
-// 藻井的四个侧面沿球面法线方向（近似径向）向内收拢。
-// 底面（靠近穹顶外表面）比顶面（内表面开口）大。
-//
-// 底面积 ≈ (w_bottom × arc_height_bottom)
-// 顶面积 ≈ (w_top    × arc_height_top)
-//
-// arc_height 在深度 d 处的修正：
-//   弧长 ∝ 半径 → 深度 d 处的弧长 = arc_height × (R+d)/R
-//   同理宽度也要修正：w_at_depth = w × (R+d)/R
-//
-// 但由于论文说藻井内表面是平的（不是沿球面的），
-// 最简化的处理是：
-//   底面积 S_bot = w_bottom × arc_height × (R+depth)/R
-//   顶面积 S_top = w_top    × arc_height
-//   V ≈ (depth/3) × (S_top + S_bot + sqrt(S_top × S_bot))
-//
-// 进一步简化：藻井深度 d ≪ R（0.5m vs 22m），
-// 面积修正因子 (R+d)/R ≈ 1.02，可以忽略。
-//   直接用 V ≈ (S_top + S_bot)/2 × depth
-//
-double single_coffer_volume_prism(double phi_center,
-    double arc_height, double w_bottom, double w_top, double depth)
+double single_coffer_volume_prism(double pc,
+    double ah, double wb, double wt, double d)
 {
-    // 顶面积（内表面开口）
-    double S_top = w_top * arc_height;
-
-    // 底面积：因深度增加而略微放大（径向发散）
-    double scale = (R + depth) / R;
-    double S_bot = (w_bottom * scale) * (arc_height * scale);
-
-    // 棱台体积公式
-    return (depth / 3.0) * (S_top + S_bot + sqrt(S_top * S_bot));
+    double St = wt * ah;
+    double sc = (R + d) / R;
+    double Sb = (wb * sc) * (ah * sc);
+    return (d / 3.0) * (St + Sb + sqrt(St * Sb));
 }
 
 // ============================================================
-// 主计算
+// 拱券模型
 // ============================================================
+
+double arch_self_weight(double wr) {
+    return total_mass_no_coffers() * G * (1.0 - wr) / 28.0;
+}
+
+double arch_horizontal_thrust(double wr) {
+    // H = k · W_arch
+    // k ≈ cot(α_eff) / 2 ≈ 0.407
+    // α_eff: 推力线在拱脚处的等效倾角
+    double W = arch_self_weight(wr);
+    double phi_oc = asin(R_OCULUS / R);
+    double k = (1.0 - sin(phi_oc)) / (2.0 * cos(phi_oc));
+    return k * W;
+}
+
+double compute_jcf(double wr) {
+    return arch_horizontal_thrust(wr) / DRUM_HOOP_CAPACITY;
+}
+
+double compute_jcir(double wr) {
+    double jcf0 = compute_jcf(0.0);
+    double jcfB = compute_jcf(wr);
+    return (jcf0 - jcfB) / jcf0;
+}
+
+// ============================================================
+// 子午向裂缝分析
+// ============================================================
+
+double peak_hoop_stress_base(double wr) {
+    // 底部 (φ_apex=90°) 的有效环向拉应力
+    double st_film = sigma_theta(PI / 2.0);
+    return st_film * (1.0 - wr) + SIGMA_SHRINKAGE;
+}
+
+double compute_mcfr(double wr) {
+    // 底部有效拉应力的降低比例
+    double s0 = peak_hoop_stress_base(0.0);
+    double sB = peak_hoop_stress_base(wr);
+    return (s0 - sB) / s0;
+}
+
+// ============================================================
+// 质量计算
+// ============================================================
+
 CofferResult compute_coffers(const std::vector<CofferLayer>& layers) {
     CofferResult res;
     res.total_coffer_volume = 0.0;
     res.total_coffer_mass   = 0.0;
-
-    int n = layers.size();
+    int n = (int)layers.size();
     res.layer_volumes.resize(n);
     res.layer_masses.resize(n);
 
@@ -107,77 +122,79 @@ CofferResult compute_coffers(const std::vector<CofferLayer>& layers) {
         const CofferLayer& L = layers[i];
         double V1 = single_coffer_volume_prism(
             L.phi_center, L.arc_height, L.w_bottom, L.w_top, L.depth);
-        double V_layer = V1 * L.count;
-        double rho_i   = density(L.phi_center);
-        double M_layer = V_layer * rho_i;
-
-        res.layer_volumes[i] = V_layer;
-        res.layer_masses[i]  = M_layer;
-        res.total_coffer_volume += V_layer;
-        res.total_coffer_mass   += M_layer;
+        double Vl = V1 * L.count;
+        double Ml = Vl * density(L.phi_center);
+        res.layer_volumes[i] = Vl;
+        res.layer_masses[i]  = Ml;
+        res.total_coffer_volume += Vl;
+        res.total_coffer_mass   += Ml;
     }
-
-    res.mass_no_coffers     = total_mass_no_coffers();
+    res.mass_no_coffers      = total_mass_no_coffers();
     res.mass_reduction_ratio = res.total_coffer_mass / res.mass_no_coffers;
-
     return res;
 }
 
 // ============================================================
-// 导出应力剖面 CSV
+// CSV 导出
 // ============================================================
-void export_stress_profile(const char* filename, int n) {
-    std::ofstream f(filename);
-    f << "phi_deg,thickness_m,density_kgm3,N_phi_MNpm,N_theta_MNpm,";
-    f << "sigma_theta_MPa\n";
 
-    double phi_oc = asin(R_OCULUS / R);
-    double phi_max = PI / 2.0;
+void export_stress_profile(const char* fn, int n) {
+    std::ofstream f(fn);
+    f << "phi_apex_deg,phi_horiz_deg,thickness_m,density_kgm3,"
+      << "N_phi_MNpm,N_theta_MNpm,sigma_theta_kPa,sigma_eff_kPa,"
+      << "ft_ref_kPa\n";
+    double oc = asin(R_OCULUS / R), mx = PI / 2.0;
     for (int i = 0; i <= n; i++) {
-        double phi = phi_oc + (phi_max - phi_oc) * i / n;
-        double t   = thickness(phi);
-        double rho = density(phi);
-        double g   = rho * t * G;
-        double N_phi   = -g * R / (1.0 + cos(phi));
-        double N_theta = -g * R * (cos(phi) - 1.0/(1.0 + cos(phi)));
-        double sig_th  = N_theta / t / 1e6;  // MPa
-
-        f << phi * 180.0 / PI << ",";
-        f << t << "," << rho << ",";
-        f << N_phi / 1e6 << "," << N_theta / 1e6 << ",";
-        f << sig_th << "\n";
+        double phi = oc + (mx - oc) * i / n;
+        double st  = sigma_theta(phi);
+        double se  = st + SIGMA_SHRINKAGE;
+        f << phi * 180.0 / PI << ","
+          << (PI / 2.0 - phi) * 180.0 / PI << ","
+          << thickness(phi) << "," << density(phi) << ","
+          << N_phi_val(phi) / 1e6 << ","
+          << N_theta_val(phi) / 1e6 << ","
+          << st / 1e3 << "," << se / 1e3 << ","
+          << FT_DOME / 1e3 << "\n";
     }
     f.close();
-    std::cout << "[导出] " << filename << " (" << n+1 << " 行)\n";
 }
 
-// ============================================================
-// 导出藻井各层详情 CSV
-// ============================================================
-void export_layer_details(const char* filename,
-    const std::vector<CofferLayer>& layers,
-    const CofferResult& res)
+void export_layer_details(const char* fn,
+    const std::vector<CofferLayer>& layers, const CofferResult& res)
 {
-    std::ofstream f(filename);
-    f << "层,纬度deg,弧高m,底宽m,顶宽m,深度m,数量,";
-    f << "单个体积m3,层体积m3,层质量吨\n";
-
+    std::ofstream f(fn);
+    f << "层,纬度deg,弧高m,底宽m,顶宽m,深度m,数量,单个体积m3,层体积m3,层质量吨\n";
     for (size_t i = 0; i < layers.size(); i++) {
         const CofferLayer& L = layers[i];
         double V1 = single_coffer_volume_prism(
             L.phi_center, L.arc_height, L.w_bottom, L.w_top, L.depth);
-
-        f << L.name << ",";
-        f << L.phi_center * 180.0 / PI << ",";
-        f << L.arc_height << ",";
-        f << L.w_bottom << ",";
-        f << L.w_top << ",";
-        f << L.depth << ",";
-        f << L.count << ",";
-        f << V1 << ",";
-        f << res.layer_volumes[i] << ",";
-        f << res.layer_masses[i] / 1000.0 << "\n";
+        f << L.name << "," << L.phi_center * 180.0 / PI << ","
+          << L.arc_height << "," << L.w_bottom << "," << L.w_top << ","
+          << L.depth << "," << L.count << ","
+          << V1 << "," << res.layer_volumes[i] << ","
+          << res.layer_masses[i] / 1000.0 << "\n";
     }
     f.close();
-    std::cout << "[导出] " << filename << "\n";
+}
+
+void export_arch_scan(const char* fn,
+    const std::vector<double>& factors,
+    const std::vector<double>& Bv,
+    const std::vector<double>& jcfv,
+    const std::vector<double>& jcirv,
+    const std::vector<double>& peak_stress,
+    const std::vector<double>& mcfrv)
+{
+    std::ofstream f(fn);
+    f << "factor,B_percent,JCF,JCIR_percent,peak_stress_kPa,"
+      << "MCFR_percent\n";
+    for (size_t i = 0; i < factors.size(); i++) {
+        f << factors[i] << ","
+          << Bv[i] * 100.0 << ","
+          << jcfv[i] << ","
+          << jcirv[i] * 100.0 << ","
+          << peak_stress[i] / 1e3 << ","
+          << mcfrv[i] * 100.0 << "\n";
+    }
+    f.close();
 }
