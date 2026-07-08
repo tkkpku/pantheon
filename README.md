@@ -108,7 +108,11 @@ $$S_{\text{bottom}} = (w_{\text{bottom}} \cdot s_c) \cdot (a_h \cdot s_c) = w_{\
 
 $$M_{\text{total}} = 2\pi R^2 \int_{\phi_{\text{oc}}}^{\pi/2} \rho(\phi) \cdot t(\phi) \cdot \sin\phi \, d\phi$$
 
+<<<<<<< HEAD
 积分函数含四层密度阶梯和线性厚度渐变。n=200 的相对误差约 0.0007%（详见 `math_preparation.md` §1.6 收敛性测试），折算到减重比例 B（8.09%）上，Simpson 引入的误差不超过 0.00006 个百分点。**B 的误差主要来自激光扫描几何测量精度（~1%），而非数值积分。**
+=======
+积分函数含四层密度阶梯和线性厚度渐变。n=100/200/400 的 Simpson 收敛性测试见 `math_preparation.md` §1.6。n=200 的相对误差约 0.0007%，折算到减重比例 B（8.09%）上，Simpson 引入的误差不超过 0.00006 个百分点。**B 的误差主要来自激光扫描几何测量精度（~1%），而非数值积分。**
+>>>>>>> 952896bdb5ef29080da70e0ab0a9c7bc411c4ea8
 
 ### 3.2 薄膜解的定位
 
