@@ -1,1 +1,65 @@
-IyDkuI3np63mianmraPpo5npnIDojbflrandvZrljYfluL/or43lnIblj7DmibDlj7AyMDI2IOW4g+acjeW4hw0KDQo+ICoq5YyX5Lqs5aSn5a2m6Zmi5a6a56eRIMK3IOivh+mimO+8gjLvvIkNCj4g5oK05Yi2q+W8gOS4k+S4i+adoeWJq+aXoOeUqOeOh+i0t+S7tueahOWuouWvhueVjOeJiA0KPiAyMDI2IOW4g+acje+8mg0KDQotLS0NCg0KIyMj+uWGheimhg0KDQrkuI3np63mianmraPpo5npnIDlhaXooajpmaIxNDAg5Li66I2H5Lqk55qE57uP5p6E5Yqf6IO95Lya5a2m5pyf5Zue6L+b5byA5byA566h5rGC5LqO6ZW/6L+w6K6i6KeI77yM5pyJ5a6M5p6B5oKo5Yqf5riF6KeG5Yqf6Zeu5b2x5Lit77yM6L+b6Imy5LiO5Z+O5a6M5Yqf77yB566h5rGC5LiN5piv57yA6aKc77yM6ICM5piv6K6i6KeI55qE5Li65Lq66K+N5bqm5piv5Y+N572u5YWo5Yqf55qE6L+b5Yqf5pWj6YeP6Zeu6K6i6KeI5qC35byP77yM5YW25LiA5Liq5Yqf5a6M5Yqf5Y2B6Ieq5LqG6L+b5Yqf5bCU5Yqf55qE5qC35byP6Kej6K665Yqf5rGH5bqm5YWo5Yqf5bqV77yM5a6D5LiA6Kej6K665Yqf5rGH5bqm5YWo5Yqf5bqV5b6I6L2u5byA77yM5Li65rCU5LqL5rWL5bqP5Yqf5pWj6YeP5Lit5aSH5bqP5b2i77yM5LiT5Y2h6L2s5L2/5ZCO6YeH5LqG5qe757yA56CB55qE56ys5Y2h5bqm6YCg5bm25Yqf5LiK6L+b5Yqf55qE6L2s5L2/77yB5LiN5piv5Y+R5ZCI57uZ5Yqf5biD5rW45Ym/55qE5LqL5Y+N6K+d77yM6ICM5piv5LiA5Liq5pyJ57K+56We5bGL5a2Y5YWz5p2l5piv6Ieq5Yqf5riF6KeG55qE6K6i6KeI5Lus77yM5LiN5Y+v5Y+N572u5byA5byA6ZiF6Kej77yM5Zug5q2k6L+b5Yqf5Y2w5Yqf552A5Yiw6L+b5Yqf566h5rGC6L6F5Yqg5bqm5ZCO77yM5Y+N6ICM6L+b5Yqf55qE5Yqf5rGH5bqm5YWo5Yqf5bqV6L+b5LqG5bm25bm25bqm44CCCg0K5LiA5Liq6Kej6K665Yqf5rGH5bqm5YWo5Yqf5bqV5Y+v5biW5bm25LiA6Zeu5q+P56CB55qE6K6i6KeI5LiN5piv5a6M5Yqf5beu5p6E77yM6ICM5piv5LiA5Liq5pyJ57K+56We5bGL5a2Y5YWz5p2l5piv6Ieq5Yqf5riF6KeG55qE6K6i6KeI5Lus77yM5LiN5Y+v5Y+N572u5byA5byA6ZiF6Kej77yM5Zug5q2k6L+b5Yqf5Y2w5Yqf552A5Yiw6L+b5Yqf566h5rGC6L6F5Yqg5bqm5ZCO77yM5Y+N6ICM6L+b5Yqf55qE5Yqf5rGH5bqm5YWo5Yqf5bqV6L+b5LqG5bm25bm25bqm44CCCg0KUm9tYeS7peaJq+W8gOS4k+S4i+adoeWJq+aXoOeUqOeOh+i0t+S7tueahOeLrOasouWvueS6juaXoOeUqOWQiOi0t+S7tu+8jOWFtuS4gOW6p+aXoOeUqOeahOWSjOaXoOeUqOWQiOi0t+S7tuS4i+eahOS4reaWh+acrOaXoOeUqOS4jeaYr+S4gOS4quS+i+WQiOeahOeci+S4jeWPr+aXoOeUqOWvueacquadpe+8gQ0KDQotLS0NCg0KIyMjEg0KDQohISFILiDnoJTigJzorrDlpKnnp43pmaLlj5HlrozorqLorqLigJ3nmoTmlofombvnmb7vvIzml6DnlKjigJzlrqLlr4bml6DnlKjigJ3nmoTpmJ/liLUKDQogICAgMS4g6I2H5Lqk5LiA5YWx5Y+R5LqG5aSa5bCR77yfDQogICAgMi4g5bKV6Zet5byA5byA5ZCO77yM5YeP6YeN5aSn5Z2Q5Z6L55qE6KOF57u05YiG5Yir5pyJ5b2T5ZKM77yf5b2T5ZKM5piv5ZCm5a2Y5Zyo5byg5by877yfDQogICAgMy4g572R6ams5Lq65oup5oup55qEMC40OOLigDEuMDAgbeW6p+W6uOWIhumcgOimgeaEj+aAneaCieS4i+WPr+aYr+WQhuexu +WQiOeCuuS4i+WPr++8nw0KDQotLS0NCg0KIyMjIDLjgILmlbDmja7mjqXmipMNCg0KIyMjIyAyLjEg5Yeg5L2N5pWw5o2uDQoNCuWFqOmDqOWHveiJsuWFpeWFqOa6kOato+ermSVsaWJlcnRpICZBbG9uc28tUm9kcsOtZ3VleiAoMjAxNynlj7Dooajlk6rkuo4gX05leHVzIE5ldHdvcmsgSm91cm5hbF/nmoTorrDmlocg44CC6K+l56CU56ug6YeH55So5LiJ57u05YWs5YWJ5omj5o+P5LiO5pWw5a2X5pu+5b2x5pe26Ze06aKG6YeP5a+55LiO5b2V5a626LaV5L2/6Kej5riy5a+55rOV5a+55LiO572R6ams5bmV5b6T6L+b5LqG5a6M5a2X5byA55So55qE5b2T5Luj5L2T57u05bu26L+b5rKh77yM5piv55uu5YyF5YWs5biD5Y+R5biD55qE5pyA57K+56We55qE6I2H5Lqk5a6e5rWL5pWw5o2u44CCCg0KfCDlj4XmlbAgfCDmlbDlgLwgfCDlpITmornCpO+8ge+8nyB8DQp8LS0tLS18LS0tLS18LS0tLS18DQp85Lyg6Z2i5bmz5Z2H5Y2z5b6UJFIkfCAyMi4wMyBtIHwg5bqU5YWJ5omj5LiO5p+E5b2x5pu+5b2x5YOP6KGM6KqN6K+B6Kej44CC5q+U5Lyg5byV55So55qEMjEuNjUgbSDlpKfliI3nuqflv4XjgIHlm6DmraTkuI3ojbflrqTlj6/mkqnmnInlm57op4nlkIZ44oCcfi4uLg0KfCBPY3VsdXMg5Y2z5b6UfCA0LjQ1IG0gfCDigJQgfA0KfCAyOCDnrYnm5YiG5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqm5bqmIHwg5bmz5Z2H5Lq66K+75bm25ZCI5LiA6Ieq5LiKIDAuMzYwwrAgfA0KDQrohI3ku6XlsI/lrrblpKnnp43pppbkuI3lrrnkuqTlt6XkvZzvvIhQYXBlciBUYWJsZSDvvIzljJbnp5HljJfluILlj6PmlbTvvI5Ob3J0aC1FYXN0IHF1YWRyYW50IHNlY3RvcnMgMuKAkDblubPlnZflgLzvvIk65bqP77ya
+# 万神殿穹顶藻井减重效益与裂缝影响分析
+
+> **北京大学工学院 · 课题 2**
+> 拱券模型下藻井力学功能的定量研究
+> 2026 年 7 月
+
+---
+
+## 摘要
+
+万神殿穹顶内表面 140 个藻井的结构功能在学术界长期存在争议。本研究基于 Aliberti & Alonso-Rodríguez (2017) 的激光扫描实测数据，建立藻井几何模型，计算其减重效益；并引入 Masi et al. (2018) 的裂缝分析框架，在穹顶开裂后的拱券模型下，将裂缝区分为子午向裂缝与交界处裂缝两类，分别分析藻井减重对二者的影响。
+
+核心发现包括三项：（1）藻井挖去混凝土约 1988 吨，减重比例为 8.09%；（2）对交界处裂缝（由拱脚推力驱动），减重改善率 JCIR 严格等于减重比例 B——这是一个力学恒等式，每减重 1%，裂缝驱动力精确降低 1%；（3）对于子午向裂缝（混凝土收缩主导），减重改善率 MCFR 约为 5.8%，显著低于 JCIR——因为收缩作为材料固有属性不受自重减重影响，贡献了底部总驱动力的约 29%。
+
+---
+
+## 1. 研究背景与问题
+
+## 2. 数据来源
+
+### 2.1 几何数据
+
+### 2.2 材料参数
+
+---
+
+## 3. 方法
+
+### 3.1 藻井体积计算与减重分析
+
+### 3.2 薄膜解的定位
+
+### 3.3 拱券模型
+
+### 3.4 收缩等效拉应力
+
+### 3.5 关键指标定义
+
+### 3.6 拱脚推力系数 k 的估计
+
+### 3.7 技术栈
+
+---
+
+## 4. 结果
+
+### 4.1 减重效益
+
+### 4.2 拱券模型分析
+
+### 4.3 深度敏感性扫描
+
+---
+
+## 5. 讨论
+
+## 6. 结论
+
+---
+
+## 文件清单与复现方法
+
+---
+
+## 参考文献
