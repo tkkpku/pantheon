@@ -55,5 +55,5 @@ text(2, vals(2)/2, 'Shrinkage-dominant,\nweaker response', ...
 grid on; box on;
 ylim([0, 12]);
 
-saveas(gcf, 'fig_stress_two_cracks.png');
-fprintf('Saved: fig_stress_two_cracks.png\n');
+saveas(gcf, 'figs/fig01_stress_cracks.png');
+fprintf('Saved: figs/fig01_stress_cracks.png\n');

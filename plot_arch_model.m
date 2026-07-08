@@ -68,5 +68,5 @@ text(1.5, max(jv)*0.6, sprintf('JCIR = %.1f%%', B_pct), ...
     'HorizontalAlignment', 'center');
 grid on; box on;
 
-saveas(gcf, 'fig_arch_model.png');
-fprintf('Saved: fig_arch_model.png\n');
+saveas(gcf, 'figs/fig03_arch_model.png');
+fprintf('Saved: figs/fig03_arch_model.png\n');

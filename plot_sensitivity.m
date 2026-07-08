@@ -53,8 +53,8 @@ text(1.15, JCIR(3)+1, 'JCIR == B (identity)', ...
 text(1.15, MCFR(3)+1, 'Shrinkage-dominant', ...
     'FontSize', 10, 'Color', [0 0 0.6]);
 
-saveas(gcf, 'fig_sensitivity_arch.png');
-fprintf('Saved: fig_sensitivity_arch.png\n');
+saveas(gcf, 'figs/fig04a_sensitivity.png');
+fprintf('Saved: figs/fig04a_sensitivity.png\n');
 
 figure('Position', [80, 100, 650, 420]);
 plot(factor, JCF, 'ro-', 'LineWidth', 2.5, 'MarkerSize', 10, 'MarkerFaceColor', 'r');
@@ -69,8 +69,8 @@ for i = 1:length(factor)
     text(factor(i), JCF(i) + 0.001, sprintf('%.3f', JCF(i)), ...
         'HorizontalAlignment', 'center', 'FontSize', 9);
 end
-saveas(gcf, 'fig_jcf_decrease.png');
-fprintf('Saved: fig_jcf_decrease.png\n');
+saveas(gcf, 'figs/fig04b_jcf_decrease.png');
+fprintf('Saved: figs/fig04b_jcf_decrease.png\n');
 
 figure('Position', [100, 120, 650, 420]);
 plot(factor, peak_stress, 'mo-', 'LineWidth', 2.5, 'MarkerSize', 10, 'MarkerFaceColor', 'm');
@@ -84,5 +84,5 @@ for i = 1:length(factor)
     text(factor(i), peak_stress(i) + 2, sprintf('%.0f', peak_stress(i)), ...
         'HorizontalAlignment', 'center', 'FontSize', 9);
 end
-saveas(gcf, 'fig_peak_stress.png');
-fprintf('Saved: fig_peak_stress.png\n');
+saveas(gcf, 'figs/fig04c_peak_stress.png');
+fprintf('Saved: figs/fig04c_peak_stress.png\n');

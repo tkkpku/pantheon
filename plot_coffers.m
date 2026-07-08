@@ -74,5 +74,5 @@ text(0, 0.3, 'Thrust/arch:', 'FontSize', 11);
 text(0, 0.2, sprintf('3.5 -> 3.2 MN (-%.1f%%)', B_pct), 'FontSize', 12, 'FontWeight', 'bold');
 text(0, 0.05, sprintf('JCIR = %.1f%%', B_pct), 'FontSize', 12, 'Color', [0 0.6 0], 'FontWeight', 'bold');
 
-saveas(gcf, 'fig_coffer_arch.png');
-fprintf('Saved: fig_coffer_arch.png\n');
+saveas(gcf, 'figs/fig02_coffer_data.png');
+fprintf('Saved: figs/fig02_coffer_data.png\n');

@@ -109,5 +109,5 @@ text(18, -33, '--- 57deg stop line', 'FontSize', 10, 'Color', 'red');
 text(18, -36, '- Junction crack', 'FontSize', 10, 'Color', 'm');
 text(18, -39, '-> Arch thrust H', 'FontSize', 10, 'Color', 'b');
 
-saveas(gcf, 'fig_dome_profile_arch.png');
-fprintf('Saved: fig_dome_profile_arch.png\n');
+saveas(gcf, 'figs/fig05_dome_profile.png');
+fprintf('Saved: figs/fig05_dome_profile.png\n');
