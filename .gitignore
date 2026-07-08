@@ -9,6 +9,12 @@
 *.m~
 *.mat
 
+# Visual Studio 本地配置
+.vs/
+*.suo
+*.sln.docstates
+*.user
+*.userosscache
 
 # VS Code
 .vscode/
