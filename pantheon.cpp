@@ -105,7 +105,10 @@ double arch_self_weight(double wr) {
 
 // 拱脚水平推力 H = k · W_arch
 // k ≈ cos(φ_oc) / [2 · (1 - sin(φ_oc))]（简化推力线分析）
-// 简化值 ~0.407，精确3D积分值 ~0.321，但比值 H₀/H_B 不受 k 影响
+// ⚠️ 警告：简化公式 k ≈ 0.407，精确3D积分值 k ≈ 0.321，绝对值误差约 21%！
+//      JCIR = B 作为比值不受此误差影响（k 在分子分母中抵消），
+//      但返回的推力绝对值（~3.5 MN）高估了约 21%，不可作为真实推力使用。
+//      如需精确绝对值请参考 MATLAB 3D 数值积分结果（fig06_k_invariance）。
 double arch_horizontal_thrust(double wr) {
     double W = arch_self_weight(wr);
     double phi_oc = asin(R_OCULUS / R);
