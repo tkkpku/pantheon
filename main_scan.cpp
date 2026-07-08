@@ -5,8 +5,12 @@
 #include <cmath>
 
 int main() {
+    // ---- 基准深度：Aliberti & Alonso-Rodríguez (2017) Table 3 ----
     double depths_base[5] = {0.67, 0.65, 0.61, 0.54, 0.48};
+    // ---- 深度缩放因子扫描范围 ----
     double factors[]      = {0.60, 0.80, 1.00, 1.20, 1.40};
+
+    // ---- 藻井几何参数（与 main.cpp 一致） ----
     double band = 0.84;
     double h[5]     = {4.08, 3.79, 3.52, 3.05, 2.39};
     double w_bot[5] = {3.88, 3.74, 3.39, 2.92, 2.38};
@@ -30,6 +34,7 @@ int main() {
     std::cout << "底部应力kPa  MCFR%\n";
     std::cout << std::string(78, '-') << "\n";
 
+    // ---- 扫描循环：对每个深度因子重新计算 ----
     for (int fi = 0; fi < 5; fi++) {
         double factor = factors[fi];
         std::vector<CofferLayer> layers;
@@ -45,9 +50,9 @@ int main() {
         CofferResult res = compute_coffers(layers);
         double B    = res.mass_reduction_ratio;
         double jcf  = compute_jcf(B);
-        double jcir = compute_jcir(B);
+        double jcir = compute_jcir(B);       // JCIR = B（恒等关系）
         double ps   = peak_hoop_stress_base(B);
-        double mcfr = compute_mcfr(B);
+        double mcfr = compute_mcfr(B);       // MCFR < JCIR（收缩主导）
 
         if (factor == 1.00) jcf_base = jcf;
 
@@ -81,6 +86,7 @@ int main() {
     std::cout << "\n结论: 藻井减重对交界处裂缝有直接缓解作用 (JCIR=B),\n";
     std::cout << "      对子午向裂缝影响较弱 (收缩主导)。\n\n";
 
+    // ---- 导出扫描结果供 MATLAB 绘图 ----
     std::vector<double> fv(factors, factors + 5);
     export_arch_scan("arch_scan.csv", fv, Bv, jcfv, jcirv, psv, mcfrv);
     std::cout << "[导出] arch_scan.csv\n";
