@@ -198,7 +198,7 @@ $$H \cdot R(1 - \sin\phi_{oc}) = W \cdot \bar{x}$$
 
 其中 $\bar{x}$ 为半拱自重的质心到拱冠的水平距离。对于球面弧形，近似有 $\bar{x} \approx R\cos\phi_{oc}/2$，代入得：
 
-$$k_{\text{simple}} = \frac{H}{W} \approx \frac{1-\sin\phi_{oc}}{2\cos\phi_{oc}} \approx \frac{0.798}{2 \times 0.979} \approx 0.407$$
+$$k_{\text{simple}} = \frac{H}{W} \approx \frac{1 - \sin\phi_{oc}}{2\cos\phi_{oc}} \approx \frac{0.798}{2 \times 0.979} \approx 0.407$$
 
 总推力约 98 MN，推力/总自重 ≈ 0.41，处于浅拱的典型范围（0.3–0.6）。
 
